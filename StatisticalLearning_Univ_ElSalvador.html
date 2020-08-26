@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistical Learning con R - Un caso aplicado</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Néstor Montaño" />
+    <meta name="date" content="2020-08-21" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Statistical Learning con R - Un caso aplicado
+## Coloquio de Estadística | Universidad de El Salvador
+### Néstor Montaño
+### Sociedad Ecuatoriana de Estadística
+### 2020-08-21
+
+---
+
+
+background-image: url(https://nestormontano.github.io/PresentacionesPrueba/Imagenes/Logo-BanderaCorregida_con_curva_peque.png)
+
+
+
+
+
+---
+class: center, middle
+
+# Coloquio de Estadística.
+
+### Escuela de Matemática
+
+
+
+---
+class: inverse, center, middle
+
+# Caso Banco Portugués
+  
+
+
+
+---
+
+# Caso Banco Portugués
+
+Se ha producido una disminución de ingresos para el Banco Portugués y les gustaría saber qué medidas tomar. Después de la investigación se descubre que la causa principal es que sus clientes no están depositando con tanta frecuencia como antes.  
+
+--
+  
+Se conoce que:  
+- Los depósitos a plazo permiten a los bancos retener un depósito por un período de tiempo específico, de tal manera que el banco invierta en productos financieros de mayor ganancia y que además,  
+
+--
+- Hay más posibilidad de persuadir a un clientes con depósito a plazo para que compre otro productos como fondos o seguros y así aumentar aún más el ingreso del banco.  
+
+.footnote[
+[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014.  
+Detalles pueden ser vistos en https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+]
+
+
+
+---
+
+# Caso Banco Portugués
+
+--
+## Estrategia: 
+
+### El Banco Portugués decide entonces hacer una campaña para promover depósitos a plazo. 
+
+
+.footnote[
+[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014.  
+Detalles pueden ser vistos en https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+]
+
+
+
+---
+# Caso Banco Portugués: Estrategia en marcha
+
+### Forma Clásica: 
+*Opcion 1* Llamar a todos los clientes y ofrecerles hacer un depósito a plazo.   
+*Opción 2* Que el gerente comercial o de producto escoja los perfiles a llamar de acuerdo a su experiencia.
+--
+
+### Data Driven Decision: 
+Identificar a los clientes existentes que tienen mayores posibilidades de suscribirse a un depósito a plazo, de esta manera enfocar el esfuerzo de marketing en dichos clientes y así máximizar el resultado (minimizando la inversión)   
+  
+
+
+
+---
+class: inverse, center, middle
+
+# Cambio de Paradigma
+
+De confiar en la experiencia o intuición a confiar en un algoritmo/modelo que **aprende** las reglas a partir de los datos recopilados
+  
+
+
+---
+background-image: url(Images/aprendizaje_01.png)
+background-size: cover
+class: center, bottom, inverse
+
+---
+background-image: url(Images/aprendizaje_02.png)
+background-size: cover
+class: center, bottom, inverse
+
+
+---
+background-image: url(Images/aprendizaje_03.png)
+background-size: cover
+class: center, bottom, inverse
+
+
+---
+background-image: url(Images/aprendizaje_04.png)
+background-size: cover
+class: center, bottom, inverse
+
+
+---
+
+
+---
+# Caso Banco Portugués: Estrategia en marcha
+
+### Data Driven Decision: 
+Identificar a los clientes existentes que tienen mayores posibilidades de suscribirse a un depósito a plazo, de esta manera enfocar el esfuerzo de marketing en dichos clientes y así máximizar el resultado (minimizando la inversión)   
+
+--
+Este es un problema de Aprendizaje supervisado, repasemoa algunos conceptos 
+
+
+
+---
+class: inverse, center, middle
+
+# Aprendizaje Supervisado
+  
+
+
+
+---
+# Aprendizaje Supervisado
+
+Se parte conociendo el output/label (variable objetivo) en nuestras observaciones y se desea desarrollar un modelo para predecir ese output.  
+
+**Predicción**  
+- Cuando la variable objetivo es contínua  
+- Se suele llamar también un problema de regresión
+
+
+   
+**Clasificación**
+- Cuando la variable objetivo es categórica  
+- Notar que un problema de predicción se puede transformar en uno de clasificación si discretivamos la variable objetivo, por ejemplo la calificación de riesgo que es de 1 a 1000 pasarla a AAA, AA, A, B, etc.
+
+
+
+---
+# Aprendizaje Supervisado: Proceso
+
+Podemos resumirlo en:
+
+**Preeliminares**   
+- Comprender el problema de negocio &gt; Entender los datos disponibles o recopilables
+
+**Datos**   
+- Recopilación &gt; Preparación &gt; Exploración de datos   
+- La data debe ser representativa (evitar sesgos visibles o no visibles como el sesgo de selección)
+- A veces se requiere un paso de etiquetado (en análisis de texto o imágenes por ejemplo)
+
+
+
+
+---
+
+Del sesgo de selección:
+&lt;img src="Images/SesgoSeleccion_AvionesBalas.jpg" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# Aprendizaje Supervisado: Proceso
+
+**Preeliminares**   
+
+**Datos**   
+
+**Modelar**
+- Entrenar &gt; Comprobar el modelo  
+- Ajustar hiperparámetros (Tuning)
+- Recordar que el modelo aprende, no crea; es decir, si lo entrenamos con etiquetas "AAA", "AA", "A", nunca va a predecir un "C".
+
+**Evaluacion y mejora|rediseño**
+- Aplicar el modelo &gt; Evaluarlo &gt; Mejorarlo o reiniciar el proceso  
+
+
+---
+# Aprendizaje supervisado - Modelar
+
+El objetivo es predecir una respuesta/salida/resultado sea numérica (para regresión) o una etiqueta (en clasificación) en función de un conjunto de datos de entrada o variables explicatorias esperando que el modelo prediga "bien" los casos no observados
+
+&gt;respuesta = f(variables explicativas/inputs) + ruido/error
+
+
+--
+La primera duda es: ¿Qué debo usar como función **f**? ¿Que modelo o familia de modelos o algoritmo se debe utilizar?. Aqui tenemos diversas "afluentes", puede ser un modelo de Statistical Learning o de Machine Learning o incluso un híbrido. Aclaro que Deep learning está contenido en Machine learning.
+
+--
+
+Luego de definir las herramientas a usar, se debe encontrar el **"mejor modelo"**, eso implica definir qué significa "mejor"; aquí aparecen las funciones de costo a las cuales se desea minimizar o maximizar. Nótese que este proceso de optimización puede traer consigo problemas de sobreajuste.
+
+
+
+---
+# Aprendizaje supervisado - Esquematizando:
+
+
+&lt;img src="Images/desglosando_01.png" width="1721" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+# Aprendizaje supervisado - Esquematizando:
+
+
+&lt;img src="Images/desglosando_02.png" width="1721" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# Aprendizaje supervisado - Esquematizando:
+
+
+&lt;img src="Images/desglosando_03.png" width="1721" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# Aprendizaje supervisado - Esquematizando:
+
+
+&lt;img src="Images/desglosando_04.png" width="1721" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+# Aprendizaje supervisado - Esquematizando:
+
+
+&lt;img src="Images/desglosando_05.png" width="1721" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+# Aprendizaje supervisado - Esquematizando:
+
+
+&lt;img src="Images/desglosando_06.png" width="1721" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+background-image: url(Images/Meme_WinniePoohTerno_RegresionLenguajeComplicado.png)
+background-size: contain
+class: center, bottom
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Caso Banco Portugués
+  
+
+
+
+---
+
+# Caso Banco Portugués
+
+Se ha producido una disminución de ingresos para el Banco Portugués y les gustaría saber qué medidas tomar. Después de la investigación se descubre que la causa principal es que sus clientes no están depositando con tanta frecuencia como antes.  
+
+
+  
+Se conoce que:  
+- Los depósitos a plazo permiten a los bancos retener un depósito por un período de tiempo específico, de tal manera que el banco invierta en productos financieros de mayor ganancia y que además,  
+
+
+- Hay más posibilidad de persuadir a un clientes con depósito a plazo para que compre otro productos como fondos o seguros y así aumentar aún más el ingreso del banco.  
+
+.footnote[
+[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014.  
+Detalles pueden ser vistos en https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+]
+
+
+
+---
+
+# Caso Banco Portugués
+
+## Estrategia: 
+
+### El Banco Portugués decide entonces hacer una campaña para promover depósitos a plazo. 
+
+#### Data Driven Decision: 
+Identificar a los clientes existentes que tienen mayores posibilidades de suscribirse a un depósito a plazo, de esta manera enfocar el esfuerzo de marketing en dichos clientes y así máximizar el resultado (minimizando la inversión)   
+
+.footnote[
+[Moro et al., 2014] S. Moro, P. Cortez and P. Rita. A Data-Driven Approach to Predict the Success of Bank Telemarketing. Decision Support Systems, Elsevier, 62:22-31, June 2014.  
+Detalles pueden ser vistos en https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+]
+
+
+
+---
+# Caso Banco Portugués
+
+** Variable de salida (objetivo deseado)**
+* y: ¿el cliente ha suscrito un depósito a plazo?  ('yes','no')
+
+**Variables socio demográficas**
+* age: Edad, 
+* job: trabajo ('admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management', 'retired', 'self-employed', 'services', 'student', 'technician', 'unemployed', 'unknown'), 
+* marital: estado civil  ('divorced','married','single','unknown'; note: 'divorced' means divorced or widowed), 
+* education: nivel educativo: ('basic.4y', 'basic.6y', 'basic.9y', 'high.school', 'illiterate', 'professional.course', 'university.degree', 'unknown')
+* default: ¿ha caído en mora? ('no','yes','unknown')
+* housing: ¿tiene préstamo para vivienda? ('no','yes','unknown')
+* loan: ¿tiene prestamo personal?   
+
+
+
+---
+# Caso Banco Portugués
+
+**Variables de último contacto de la presente campaña**
+* contact: tipo de comunicación de contacto ('cellular', 'telephone')
+* month, day_of_week
+* duration: duración del último contacto, en segundos **Leer nota**
+* campaign: número de contactos realizados durante esta campaña y para este cliente
+* pdays: número de días que pasaron después de que el cliente fue contactado por última vez desde una campaña anterior (numérico; 999 significa que el cliente no fue contactado previamente)
+* previous: número de contactos realizados antes de esta campaña y para este cliente
+* poutcome: resultado de la campaña de marketing anterior ('failure','nonexistent','success')
+* emp.var.rate: tasa de variación del empleo - indicador trimestral 
+* cons.price.idx: índice de precios al consumidor - indicador mensual 
+* cons.conf.idx:  índice de confianza del consumidor - indicador mensual 
+* euribor3m: euribor tasa de 3 meses - indicador diario
+* nr.employed:  número de empleados - indicador trimestral 
+
+
+
+---
+# Caso Banco Portugués
+
+
+- Nuestra variable de respuesta será: ¿el cliente ha suscrito un depósito a plazo?  ('yes','no')
+- Es decir: `\(y\)` es una variable categórica
+
+&gt; Aprendizaje supervisado: Modelo de clasificación
+
+
+
+
+---
+class: inverse, center, middle
+
+# Caso Banco Portugués
+
+## Desarrollo en R (notebook)
+
+
+
+
+---
+# GAM
+
+
+**Regresión común**
+`$$y = \beta_0 + x_1\beta_1 + \varepsilon, \quad \varepsilon \sim N(0, \sigma^2)$$`
+
+
+**Modelos aditivos generalizados**
+`$$y = \beta_0 + f(x_1) + \varepsilon, \quad \varepsilon \sim N(0, \sigma^2)$$`
+
+El ejemplo es una funcióm muy simple de un modelos aditivo generalizado, aquí la función **f** se centra en las splines. Esto podría complicarse aplicando transformaciones a `\(y\)` así como el `\(\varepsilon\)` podría generalizarse a otras distribuciones como Poisson por ejemplo.
+
+
+
+
+---
+# MARS
+
+
+**Regresión polinomial**
+$$ y_i = \beta_0 + \beta_1 x_i + \beta_2 x^2_i + \beta_3 x^3_i \dots + \beta_d x^d_i + \epsilon_i,$$
+
+
+**Modelos aditivos generalizados**
+
+ `\(y_i = \beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \beta_3 C_3(x_i) \dots + \beta_d C_d(x_i) + \epsilon_i\)`
+
+Un modelo MARS podría tomar esta forma por ejemplo:
+`$$y\begin{equation}
+\tag{7.4}
+  \text{y} = 
+  \begin{cases}
+    \beta_0 + \beta_1(c_1 - \text{x}) &amp; \text{x} &lt; c_1, \\
+    \beta_0 + \beta_1(\text{x} - c_1) &amp; \text{x} &gt; c_1 \quad \&amp; \quad \text{x} &lt; c_2, \\
+    \beta_0 + \beta_1(c_2 - \text{x}) &amp; \text{x} &gt; c_2
+  \end{cases}
+\end{equation}$$`
+
+La idea de MARS se puede resumir en primero "cortar" nuestro rango de datos y luego aplicar un spline en cada parte; parecido a regresión aplicada por partes.
+
+
+---
+class: inverse, center, middle
+
+# Statistical Learning con R - Un caso aplicado
+
+### Néstor Montaño P.   
+### Sociead Ecuatoriana de Estadística
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
